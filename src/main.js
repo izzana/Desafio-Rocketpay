@@ -89,3 +89,51 @@ const cardNumberPattern = {
 }
 
 const cardNumberMasked = IMask(cardNumber, cardNumberPattern)
+
+const addButton = document.querySelector("#add-card")
+addButton.addEventListener("click", () => {
+    alert("Cartão adicionado")
+})
+
+document.querySelector("form").addEventListener("submit", (event) => {
+    event.preventDefault()//desativando realod do submit
+})//pra não recarreagar a página quando submitar, quando clicar no botão
+
+const cardHolder = document.querySelector("#card-holder")
+cardHolder.addEventListener("input",  () => {
+    const ccHolder = document.querySelector(".cc-holder .value")//acessando por hierarquia
+    ccHolder.innerText =
+      cardHolder.value.length === 0
+        ? "FULANO DA SILVA" //olhando quantas letras tem no input
+        : cardHolder.value 
+})
+
+//criando um escutador/observador para observar quando acontece um input
+securityCodeMasked.on("accept", () => {
+    updateSecurityCode(securityCodeMasked.value)
+})//checando se é aceito o que tá no mask
+
+function updateSecurityCode(code) {
+    const ccSecurity = document.querySelector(".cc-security .value")//endereço do input
+    ccSecurity.innerText = code.length === 0 ? 123 : code
+}
+
+cardNumberMasked.on("accept", () => {
+    const cardType = cardNumberMasked.masked.currentMask.cardtype //para saber qual cartão foi adicionado, estou acessando o masked nele, depois o currentMask(a máscara que se encaixou na função) e por fim o cardType(chave do objeto)
+    setCardType(cardType)
+    updateCardNumber(cardNumberMasked.value)
+})
+
+function updateCardNumber(number) {
+    const ccNumber = document.querySelector(".cc-number")
+    ccNumber.innerText = number.length === 0 ? "1234 5678 9012 3456" : number
+}
+
+expirationDateMasked.on("accept", () => {//checando a data de expiração
+    updateExpirationDate(expirationDateMasked.value)//recebendo a data 
+})
+
+function updateExpirationDate(date) {
+    const ccExpiration = document.querySelector(".cc-extra .value") //acessando a data 
+    ccExpiration.innerText = date.length === 0 ? "02/32" : date//se apagar a data colocaremos uma data padrão, se não colocaremos a que o usuário escolher
+}
